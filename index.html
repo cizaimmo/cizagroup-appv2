@@ -6,7 +6,6 @@
 <title>CIZA GROUP — App Officielle</title>
 <link rel="icon" href="logotransparent.png">
 
-<!-- 🔐 PROTECTION -->
 <script>
 if(localStorage.getItem("ciza_user_status") !== "active"){
   window.location.replace("login.html");
@@ -22,8 +21,9 @@ html,body{
   color:#fff;
   overflow-x:hidden;
 }
+body.noscroll{overflow:hidden}
 
-/* ===== SPLASH ===== */
+/* SPLASH */
 #splash{
   position:fixed;
   inset:0;
@@ -38,34 +38,35 @@ html,body{
 .splash-logo{width:180px;filter:drop-shadow(0 0 30px #F2B840)}
 .splash-text{color:#F2B840;font-size:26px;margin-top:12px}
 
-/* ===== HEADER ===== */
+/* HEADER */
 header{
   position:sticky;
   top:0;
   z-index:1000;
   display:flex;
-  align-items:center;
   justify-content:space-between;
+  align-items:center;
   padding:14px 16px;
   background:rgba(255,255,255,.08);
   backdrop-filter:blur(12px);
   border-bottom:1px solid #F2B840;
 }
 header img{width:44px}
-.header-icons{
-  display:flex;
-  gap:18px;
-}
-.icon-btn{
-  font-size:22px;
-  color:#F2B840;
-  cursor:pointer;
-}
+.icon-btn{font-size:22px;color:#F2B840;cursor:pointer}
 
-/* ===== MENU ===== */
+/* MENU */
+#menuOverlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.45);
+  z-index:9997;
+  display:none;
+}
+#menuOverlay.active{display:block}
+
 #menu{
   position:fixed;
-  top:0; right:0;
+  top:0;right:0;
   width:75%;
   max-width:320px;
   height:100vh;
@@ -77,14 +78,21 @@ header img{width:44px}
   z-index:9998;
 }
 #menu.open{transform:translateX(0)}
+
+.menu-close{
+  text-align:right;
+  font-size:26px;
+  color:#F2B840;
+  cursor:pointer;
+  margin-bottom:10px;
+}
 .menu-item{
   padding:14px 0;
   border-bottom:1px solid rgba(255,255,255,.2);
   cursor:pointer;
 }
-.menu-item:hover{color:#F2B840}
 
-/* ===== FLOATING SEARCH ===== */
+/* FLOATING SEARCH */
 #fab{
   position:fixed;
   bottom:24px;
@@ -99,10 +107,10 @@ header img{width:44px}
   align-items:center;
   justify-content:center;
   cursor:pointer;
-  z-index:9997;
+  z-index:9996;
 }
 
-/* ===== SEARCH OVERLAY ===== */
+/* SEARCH */
 #searchOverlay{
   position:fixed;
   inset:0;
@@ -123,8 +131,8 @@ header img{width:44px}
   top:-40px;
   right:0;
   font-size:26px;
-  cursor:pointer;
   color:#F2B840;
+  cursor:pointer;
 }
 .search-box input{
   width:100%;
@@ -133,7 +141,7 @@ header img{width:44px}
   border:none;
   font-size:16px;
 }
-.search-results .item{
+.item{
   margin-top:12px;
   padding:14px;
   border:2px solid #F2B840;
@@ -141,12 +149,9 @@ header img{width:44px}
   cursor:pointer;
   background:rgba(255,255,255,.08);
 }
-.search-results .item:hover{
-  background:#F2B840;
-  color:#06142E;
-}
+.item:hover{background:#F2B840;color:#06142E}
 
-/* ===== CONTENT ===== */
+/* CONTENT */
 .section-title{
   width:90%;
   margin:30px auto 10px;
@@ -170,7 +175,7 @@ header img{width:44px}
   cursor:pointer;
 }
 
-/* ===== FOOTER (IDENTIQUE) ===== */
+/* FOOTER */
 .footer{
   margin-top:50px;
   padding:30px 20px;
@@ -186,17 +191,12 @@ header img{width:44px}
   color:#F2B840;
   text-decoration:none;
 }
-.footer-copy{
-  margin-top:14px;
-  font-size:12px;
-  opacity:.7;
-}
+.footer-copy{margin-top:14px;font-size:12px;opacity:.7}
 </style>
 </head>
 
 <body>
 
-<!-- SPLASH -->
 <div id="splash">
   <div align="center">
     <img src="logotransparent.png" class="splash-logo">
@@ -206,31 +206,30 @@ header img{width:44px}
 
 <header>
   <img src="logotransparent.png">
-  <div class="header-icons">
-    <div class="icon-btn" onclick="openSearch()">🔍</div>
-    <div class="icon-btn" onclick="toggleMenu()">☰</div>
+  <div>
+    <span class="icon-btn" onclick="openSearch()">🔍</span>
+    <span class="icon-btn" onclick="openMenu()">☰</span>
   </div>
 </header>
 
-<!-- MENU -->
+<div id="menuOverlay" onclick="closeMenu()"></div>
+
 <div id="menu">
+  <div class="menu-close" onclick="closeMenu()">✕</div>
   <div class="menu-item" onclick="go('index.html')">🏠 Accueil</div>
   <div class="menu-item" onclick="go('account.html')">👤 Mon compte</div>
-  <div class="menu-item" onclick="go('login.html')">🔐 Connexion</div>
   <div class="menu-item" onclick="go('delete-account.html')">❌ Supprimer le compte</div>
   <div class="menu-item" onclick="logout()">🚪 Déconnexion</div>
 </div>
 
-<!-- SEARCH OVERLAY -->
 <div id="searchOverlay">
   <div class="search-box">
     <div class="search-close" onclick="closeSearch()">✕</div>
     <input placeholder="Rechercher un service ou formulaire…" onkeyup="search(this.value)">
-    <div class="search-results" id="results"></div>
+    <div id="results"></div>
   </div>
 </div>
 
-<!-- CONTENT -->
 <div class="section-title">🌍 CIZA DIASPORA+</div>
 <div class="card" onclick="go('diaspora.html')">🌍 Services Diaspora</div>
 
@@ -261,7 +260,7 @@ header img{width:44px}
     <a href="account.html">Mon compte</a>
     <a href="mailto:infos@cizagroup.com">Contact</a>
   </div>
-  <div class="footer-copy">© 2026 CIZA GROUP — Tous droits réservés</div>
+  <div class="footer-copy">© 2026 CIZA GROUP</div>
 </footer>
 
 <div id="fab" onclick="openSearch()">🔍</div>
@@ -283,11 +282,18 @@ const items=[
  ["Business & ONG","business.html"]
 ];
 
-function toggleMenu(){
-  document.getElementById("menu").classList.toggle("open");
+function openMenu(){
+  document.getElementById("menu").classList.add("open");
+  document.getElementById("menuOverlay").classList.add("active");
+  document.body.classList.add("noscroll");
+}
+function closeMenu(){
+  document.getElementById("menu").classList.remove("open");
+  document.getElementById("menuOverlay").classList.remove("active");
+  document.body.classList.remove("noscroll");
 }
 function go(url){
-  document.getElementById("menu").classList.remove("open");
+  closeMenu();
   location.href=url;
 }
 function logout(){
@@ -296,10 +302,12 @@ function logout(){
 }
 function openSearch(){
   document.getElementById("searchOverlay").classList.add("active");
+  document.body.classList.add("noscroll");
   document.getElementById("results").innerHTML="";
 }
 function closeSearch(){
   document.getElementById("searchOverlay").classList.remove("active");
+  document.body.classList.remove("noscroll");
 }
 function search(q){
   const r=document.getElementById("results");
@@ -310,9 +318,6 @@ function search(q){
     }
   });
 }
-document.getElementById("searchOverlay").onclick=e=>{
-  if(e.target.id==="searchOverlay") closeSearch();
-};
 </script>
 
 </body>
