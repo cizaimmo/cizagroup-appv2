@@ -52,13 +52,39 @@ header{
   border-bottom:1px solid #F2B840;
 }
 header img{width:44px}
+.header-icons{
+  display:flex;
+  gap:18px;
+}
 .icon-btn{
   font-size:22px;
   color:#F2B840;
   cursor:pointer;
 }
 
-/* ===== FLOATING SEARCH BUTTON ===== */
+/* ===== MENU ===== */
+#menu{
+  position:fixed;
+  top:0; right:0;
+  width:75%;
+  max-width:320px;
+  height:100vh;
+  background:rgba(255,255,255,.12);
+  backdrop-filter:blur(22px);
+  padding:25px;
+  transform:translateX(100%);
+  transition:.35s;
+  z-index:9998;
+}
+#menu.open{transform:translateX(0)}
+.menu-item{
+  padding:14px 0;
+  border-bottom:1px solid rgba(255,255,255,.2);
+  cursor:pointer;
+}
+.menu-item:hover{color:#F2B840}
+
+/* ===== FLOATING SEARCH ===== */
 #fab{
   position:fixed;
   bottom:24px;
@@ -73,8 +99,7 @@ header img{width:44px}
   align-items:center;
   justify-content:center;
   cursor:pointer;
-  z-index:9998;
-  box-shadow:0 8px 20px rgba(0,0,0,.35);
+  z-index:9997;
 }
 
 /* ===== SEARCH OVERLAY ===== */
@@ -87,9 +112,19 @@ header img{width:44px}
   padding:30px;
 }
 #searchOverlay.active{display:block}
+
 .search-box{
   max-width:520px;
-  margin:80px auto 0;
+  margin:60px auto 0;
+  position:relative;
+}
+.search-close{
+  position:absolute;
+  top:-40px;
+  right:0;
+  font-size:26px;
+  cursor:pointer;
+  color:#F2B840;
 }
 .search-box input{
   width:100%;
@@ -133,9 +168,7 @@ header img{width:44px}
   padding:18px;
   text-align:center;
   cursor:pointer;
-  transition:.2s;
 }
-.card:hover{transform:scale(1.03)}
 
 /* ===== FOOTER (IDENTIQUE) ===== */
 .footer{
@@ -173,12 +206,25 @@ header img{width:44px}
 
 <header>
   <img src="logotransparent.png">
-  <div class="icon-btn" onclick="openSearch()">🔍</div>
+  <div class="header-icons">
+    <div class="icon-btn" onclick="openSearch()">🔍</div>
+    <div class="icon-btn" onclick="toggleMenu()">☰</div>
+  </div>
 </header>
+
+<!-- MENU -->
+<div id="menu">
+  <div class="menu-item" onclick="go('index.html')">🏠 Accueil</div>
+  <div class="menu-item" onclick="go('account.html')">👤 Mon compte</div>
+  <div class="menu-item" onclick="go('login.html')">🔐 Connexion</div>
+  <div class="menu-item" onclick="go('delete-account.html')">❌ Supprimer le compte</div>
+  <div class="menu-item" onclick="logout()">🚪 Déconnexion</div>
+</div>
 
 <!-- SEARCH OVERLAY -->
 <div id="searchOverlay">
   <div class="search-box">
+    <div class="search-close" onclick="closeSearch()">✕</div>
     <input placeholder="Rechercher un service ou formulaire…" onkeyup="search(this.value)">
     <div class="search-results" id="results"></div>
   </div>
@@ -203,7 +249,6 @@ header img{width:44px}
 <div class="section-title">🏢 Solutions Entreprises</div>
 <div class="card" onclick="go('business.html')">🏢 Business & ONG</div>
 
-<!-- FOOTER -->
 <footer class="footer">
   <div class="footer-brand">
     <img src="logotransparent.png">
@@ -219,31 +264,43 @@ header img{width:44px}
   <div class="footer-copy">© 2026 CIZA GROUP — Tous droits réservés</div>
 </footer>
 
-<!-- FLOATING BUTTON -->
 <div id="fab" onclick="openSearch()">🔍</div>
 
 <script>
 const items=[
-  ["CizaRide+", "portail.html"],
-  ["Formulaire CizaRide+", "portail.html"],
-  ["CizaDelivery", "delivery.html"],
-  ["Formulaire Livraison", "delivery.html"],
-  ["CizaCarWash+", "carwash.html"],
-  ["Formulaire CarWash", "carwash.html"],
-  ["CizaAssist", "assist.html"],
-  ["Formulaire Assistance", "assist.html"],
-  ["CizaMarket", "market.html"],
-  ["CizaHome+", "cizahome.html"],
-  ["CizaLogistics+", "logistics.html"],
-  ["CizaJobs", "jobs.html"],
-  ["Business & ONG", "business.html"]
+ ["CizaRide+","portail.html"],
+ ["Formulaire CizaRide+","portail.html"],
+ ["CizaDelivery","delivery.html"],
+ ["Formulaire Livraison","delivery.html"],
+ ["CizaCarWash+","carwash.html"],
+ ["Formulaire CarWash","carwash.html"],
+ ["CizaAssist","assist.html"],
+ ["Formulaire Assistance","assist.html"],
+ ["CizaMarket","market.html"],
+ ["CizaHome+","cizahome.html"],
+ ["CizaLogistics+","logistics.html"],
+ ["CizaJobs","jobs.html"],
+ ["Business & ONG","business.html"]
 ];
 
+function toggleMenu(){
+  document.getElementById("menu").classList.toggle("open");
+}
+function go(url){
+  document.getElementById("menu").classList.remove("open");
+  location.href=url;
+}
+function logout(){
+  localStorage.removeItem("ciza_user_status");
+  location.href="login.html";
+}
 function openSearch(){
   document.getElementById("searchOverlay").classList.add("active");
   document.getElementById("results").innerHTML="";
 }
-
+function closeSearch(){
+  document.getElementById("searchOverlay").classList.remove("active");
+}
 function search(q){
   const r=document.getElementById("results");
   r.innerHTML="";
@@ -253,12 +310,9 @@ function search(q){
     }
   });
 }
-
 document.getElementById("searchOverlay").onclick=e=>{
-  if(e.target.id==="searchOverlay") e.target.classList.remove("active");
+  if(e.target.id==="searchOverlay") closeSearch();
 };
-
-function go(url){location.href=url;}
 </script>
 
 </body>
