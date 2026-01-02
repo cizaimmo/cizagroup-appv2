@@ -200,16 +200,30 @@ footer a{
 function toggleMenu(){
   document.getElementById("menu").classList.toggle("open");
 }
+
 function logout(){
   localStorage.removeItem("ciza_user_status");
   location.href="login.html";
 }
+
 function searchService(q){
   q=q.toLowerCase();
   document.querySelectorAll(".service").forEach(c=>{
     c.style.display = c.innerText.toLowerCase().includes(q) ? "block" : "none";
   });
 }
+
+/* UX PRO : fermer le menu en cliquant ailleurs */
+document.addEventListener("click", e=>{
+  const menu = document.getElementById("menu");
+  if(menu.classList.contains("open") &&
+     !menu.contains(e.target) &&
+     !e.target.classList.contains("menu-btn")){
+    menu.classList.remove("open");
+  }
+});
+
+/* V2 READY : notifications / historique / wallet */
 </script>
 
 </body>
