@@ -23,53 +23,82 @@ html,body{
   overflow-x:hidden;
 }
 
-/* SPLASH */
+/* ===== SPLASH ===== */
 #splash{
-  position:fixed;inset:0;
+  position:fixed;
+  inset:0;
   background:radial-gradient(circle,#0b1c34,#06142E);
-  display:flex;align-items:center;justify-content:center;
   z-index:9999;
+  display:flex;
+  justify-content:center;
+  align-items:center;
   animation:fade 2.5s ease 2.5s forwards;
 }
 @keyframes fade{to{opacity:0;visibility:hidden}}
-.splash-logo{width:200px;filter:drop-shadow(0 0 35px #F2B840)}
-.splash-text{color:#F2B840;font-size:28px;margin-top:12px}
+.splash-logo{width:180px;filter:drop-shadow(0 0 30px #F2B840)}
+.splash-text{color:#F2B840;font-size:26px;margin-top:12px}
 
-/* HEADER */
+/* ===== HEADER ===== */
 header{
-  position:sticky;top:0;z-index:1000;
-  display:flex;align-items:center;gap:12px;
-  padding:14px;
+  position:sticky;
+  top:0;
+  z-index:1000;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:14px 16px;
   background:rgba(255,255,255,.08);
-  backdrop-filter:blur(14px);
+  backdrop-filter:blur(12px);
   border-bottom:1px solid #F2B840;
 }
-header img{width:45px}
-.icon-btn{font-size:22px;color:#F2B840;cursor:pointer}
+header img{width:44px}
+.header-icons{
+  display:flex;
+  gap:18px;
+  align-items:center;
+}
+.icon-btn{
+  font-size:22px;
+  color:#F2B840;
+  cursor:pointer;
+}
 
-/* SEARCH OVERLAY */
-#searchBox{
-  position:fixed;inset:0;
+/* ===== SEARCH POPUP ===== */
+#searchOverlay{
+  position:fixed;
+  inset:0;
   background:rgba(6,20,46,.95);
-  display:none;flex-direction:column;
-  padding:20px;z-index:99999;
+  z-index:9998;
+  display:none;
+  padding:30px;
 }
-#searchBox input{
-  padding:12px;border-radius:20px;border:none;
-  outline:none;font-size:16px;
+#searchOverlay.active{display:block}
+.search-box{
+  max-width:500px;
+  margin:80px auto 0;
 }
-.search-close{text-align:right;font-size:22px;color:#F2B840;cursor:pointer;margin-bottom:10px}
+.search-box input{
+  width:100%;
+  padding:14px;
+  border-radius:30px;
+  border:none;
+  font-size:16px;
+}
+.search-results .card{margin-top:12px}
 
-/* MENU */
+/* ===== MENU ===== */
 #menu{
-  position:fixed;right:0;top:0;
-  width:75%;max-width:320px;height:100vh;
+  position:fixed;
+  top:0;right:0;
+  width:75%;
+  max-width:320px;
+  height:100vh;
   background:rgba(255,255,255,.12);
   backdrop-filter:blur(22px);
   padding:25px;
   transform:translateX(100%);
-  transition:.4s;
-  z-index:99998;
+  transition:.35s;
+  z-index:9999;
 }
 #menu.open{transform:translateX(0)}
 .menu-item{
@@ -79,31 +108,53 @@ header img{width:45px}
 }
 .menu-item:hover{color:#F2B840}
 
-/* CONTENT */
+/* ===== CONTENT ===== */
 .section-title{
-  width:90%;margin:25px auto 10px;
-  font-size:22px;color:#F2B840;font-weight:bold;
+  width:90%;
+  margin:30px auto 10px;
+  font-size:22px;
+  color:#F2B840;
+  font-weight:bold;
 }
 .grid{
-  width:90%;margin:auto;
-  display:grid;grid-template-columns:1fr 1fr;
+  width:90%;
+  margin:auto;
+  display:grid;
+  grid-template-columns:1fr 1fr;
   gap:14px;
 }
 .card{
   background:rgba(255,255,255,.08);
   border:2px solid #F2B840;
-  border-radius:16px;
-  padding:18px;text-align:center;
-  cursor:pointer;transition:.25s;
+  border-radius:18px;
+  padding:18px;
+  text-align:center;
+  cursor:pointer;
+  transition:.2s;
 }
-.card:hover{transform:scale(1.04)}
+.card:hover{transform:scale(1.03)}
 
-/* FOOTER */
-footer{
-  margin-top:40px;padding:25px;
-  text-align:center;font-size:14px;opacity:.85;
+/* ===== FOOTER ===== */
+.footer{
+  margin-top:50px;
+  padding:30px 20px;
+  background:rgba(255,255,255,.05);
+  border-top:1px solid #F2B840;
+  text-align:center;
 }
-footer a{color:#F2B840;text-decoration:none;display:block;margin-top:6px}
+.footer-brand img{width:60px}
+.footer-name{color:#F2B840;font-weight:bold}
+.footer-links a{
+  display:block;
+  margin:6px 0;
+  color:#F2B840;
+  text-decoration:none;
+}
+.footer-copy{
+  margin-top:14px;
+  font-size:12px;
+  opacity:.7;
+}
 </style>
 </head>
 
@@ -119,65 +170,95 @@ footer a{color:#F2B840;text-decoration:none;display:block;margin-top:6px}
 
 <header>
   <img src="logotransparent.png">
-  <div class="icon-btn" onclick="openSearch()">🔍</div>
-  <div class="icon-btn" onclick="toggleMenu()">☰</div>
+  <div class="header-icons">
+    <div class="icon-btn" onclick="openSearch()">🔍</div>
+    <div class="icon-btn" onclick="toggleMenu()">☰</div>
+  </div>
 </header>
 
 <!-- SEARCH -->
-<div id="searchBox">
-  <div class="search-close" onclick="closeSearch()">✕</div>
-  <input placeholder="Rechercher un service…" onkeyup="searchService(this.value)">
+<div id="searchOverlay">
+  <div class="search-box">
+    <input placeholder="Rechercher un service…" onkeyup="filterServices(this.value)">
+    <div class="search-results" id="results"></div>
+  </div>
 </div>
 
 <!-- MENU -->
 <div id="menu">
-  <div class="menu-item" onclick="location.href='index.html'">🏠 Accueil</div>
-  <div class="menu-item" onclick="location.href='account.html'">👤 Mon compte</div>
-  <div class="menu-item" onclick="location.href='login.html'">🔐 Connexion</div>
-  <div class="menu-item" onclick="location.href='delete-account.html'">❌ Supprimer le compte</div>
+  <div class="menu-item" onclick="go('index.html')">🏠 Accueil</div>
+  <div class="menu-item" onclick="go('account.html')">👤 Mon compte</div>
+  <div class="menu-item" onclick="go('login.html')">🔐 Connexion</div>
+  <div class="menu-item" onclick="go('delete-account.html')">❌ Supprimer le compte</div>
   <div class="menu-item" onclick="logout()">🚪 Déconnexion</div>
 </div>
 
 <!-- CONTENT -->
 <div class="section-title">🌍 CIZA DIASPORA+</div>
-<div class="card service" onclick="location.href='diaspora.html'">🌍 Services Diaspora</div>
+<div class="card service" onclick="go('diaspora.html')">🌍 Services Diaspora</div>
 
 <div class="section-title">🇧🇮 Services Locaux</div>
 <div class="grid">
-  <div class="card service" onclick="location.href='portail.html'">🚗 CizaRide+</div>
-  <div class="card service" onclick="location.href='delivery.html'">📦 CizaDelivery</div>
-  <div class="card service" onclick="location.href='carwash.html'">🧼 CizaCarWash+</div>
-  <div class="card service" onclick="location.href='assist.html'">🤝 CizaAssist</div>
-  <div class="card service" onclick="location.href='market.html'">🛒 CizaMarket</div>
-  <div class="card service" onclick="location.href='cizahome.html'">🏠 CizaHome+</div>
-  <div class="card service" onclick="location.href='logistics.html'">🚚 CizaLogistics+</div>
-  <div class="card service" onclick="location.href='jobs.html'">💼 CizaJobs</div>
+  <div class="card service" onclick="go('portail.html')">🚗 CizaRide+</div>
+  <div class="card service" onclick="go('delivery.html')">📦 CizaDelivery</div>
+  <div class="card service" onclick="go('carwash.html')">🧼 CizaCarWash+</div>
+  <div class="card service" onclick="go('assist.html')">🤝 CizaAssist</div>
+  <div class="card service" onclick="go('market.html')">🛒 CizaMarket</div>
+  <div class="card service" onclick="go('cizahome.html')">🏠 CizaHome+</div>
+  <div class="card service" onclick="go('logistics.html')">🚚 CizaLogistics+</div>
+  <div class="card service" onclick="go('jobs.html')">💼 CizaJobs</div>
 </div>
 
 <div class="section-title">🏢 Solutions Entreprises</div>
-<div class="card service" onclick="location.href='business.html'">🏢 Business & ONG</div>
+<div class="card service" onclick="go('business.html')">🏢 Business & ONG</div>
 
-<footer>
-© 2026 CIZA GROUP
-<a href="legal.html">Mentions légales</a>
-<a href="privacy.html">Confidentialité</a>
-<a href="mailto:infos@cizagroup.com">Contact</a>
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-brand">
+    <img src="logotransparent.png">
+    <div class="footer-name">CIZA GROUP</div>
+    <div>Écosystème de services digitaux</div>
+  </div>
+
+  <div class="footer-links">
+    <a href="legal.html">Mentions légales</a>
+    <a href="privacy.html">Confidentialité</a>
+    <a href="account.html">Mon compte</a>
+    <a href="mailto:infos@cizagroup.com">Contact</a>
+  </div>
+
+  <div class="footer-copy">
+    © 2026 CIZA GROUP — Tous droits réservés
+  </div>
 </footer>
 
 <script>
-function toggleMenu(){menu.classList.toggle("open")}
+function toggleMenu(){
+  document.getElementById("menu").classList.toggle("open");
+}
+function go(url){
+  toggleMenu();
+  location.href=url;
+}
 function logout(){
   localStorage.removeItem("ciza_user_status");
   location.href="login.html";
 }
-function openSearch(){searchBox.style.display="flex"}
-function closeSearch(){searchBox.style.display="none"}
-function searchService(q){
-  q=q.toLowerCase();
+function openSearch(){
+  document.getElementById("searchOverlay").classList.add("active");
+}
+function filterServices(q){
+  const res=document.getElementById("results");
+  res.innerHTML="";
   document.querySelectorAll(".service").forEach(s=>{
-    s.style.display = s.innerText.toLowerCase().includes(q) ? "block" : "none";
+    if(s.innerText.toLowerCase().includes(q.toLowerCase())){
+      res.appendChild(s.cloneNode(true));
+    }
   });
 }
+document.getElementById("searchOverlay").onclick=e=>{
+  if(e.target.id==="searchOverlay") e.target.classList.remove("active");
+};
 </script>
 
 </body>
