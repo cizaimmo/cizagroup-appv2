@@ -52,61 +52,64 @@ header{
   border-bottom:1px solid #F2B840;
 }
 header img{width:44px}
-.header-icons{
-  display:flex;
-  gap:18px;
-  align-items:center;
-}
 .icon-btn{
   font-size:22px;
   color:#F2B840;
   cursor:pointer;
 }
 
-/* ===== SEARCH POPUP ===== */
+/* ===== FLOATING SEARCH BUTTON ===== */
+#fab{
+  position:fixed;
+  bottom:24px;
+  right:24px;
+  width:58px;
+  height:58px;
+  border-radius:50%;
+  background:#F2B840;
+  color:#06142E;
+  font-size:26px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  z-index:9998;
+  box-shadow:0 8px 20px rgba(0,0,0,.35);
+}
+
+/* ===== SEARCH OVERLAY ===== */
 #searchOverlay{
   position:fixed;
   inset:0;
-  background:rgba(6,20,46,.95);
-  z-index:9998;
+  background:rgba(6,20,46,.96);
+  z-index:9999;
   display:none;
   padding:30px;
 }
 #searchOverlay.active{display:block}
 .search-box{
-  max-width:500px;
+  max-width:520px;
   margin:80px auto 0;
 }
 .search-box input{
   width:100%;
-  padding:14px;
+  padding:16px;
   border-radius:30px;
   border:none;
   font-size:16px;
 }
-.search-results .card{margin-top:12px}
-
-/* ===== MENU ===== */
-#menu{
-  position:fixed;
-  top:0;right:0;
-  width:75%;
-  max-width:320px;
-  height:100vh;
-  background:rgba(255,255,255,.12);
-  backdrop-filter:blur(22px);
-  padding:25px;
-  transform:translateX(100%);
-  transition:.35s;
-  z-index:9999;
-}
-#menu.open{transform:translateX(0)}
-.menu-item{
-  padding:14px 0;
-  border-bottom:1px solid rgba(255,255,255,.2);
+.search-results .item{
+  margin-top:12px;
+  padding:14px;
+  border:2px solid #F2B840;
+  border-radius:16px;
   cursor:pointer;
+  background:rgba(255,255,255,.08);
 }
-.menu-item:hover{color:#F2B840}
+.search-results .item:hover{
+  background:#F2B840;
+  color:#06142E;
+}
 
 /* ===== CONTENT ===== */
 .section-title{
@@ -134,7 +137,7 @@ header img{width:44px}
 }
 .card:hover{transform:scale(1.03)}
 
-/* ===== FOOTER ===== */
+/* ===== FOOTER (IDENTIQUE) ===== */
 .footer{
   margin-top:50px;
   padding:30px 20px;
@@ -170,47 +173,35 @@ header img{width:44px}
 
 <header>
   <img src="logotransparent.png">
-  <div class="header-icons">
-    <div class="icon-btn" onclick="openSearch()">🔍</div>
-    <div class="icon-btn" onclick="toggleMenu()">☰</div>
-  </div>
+  <div class="icon-btn" onclick="openSearch()">🔍</div>
 </header>
 
-<!-- SEARCH -->
+<!-- SEARCH OVERLAY -->
 <div id="searchOverlay">
   <div class="search-box">
-    <input placeholder="Rechercher un service…" onkeyup="filterServices(this.value)">
+    <input placeholder="Rechercher un service ou formulaire…" onkeyup="search(this.value)">
     <div class="search-results" id="results"></div>
   </div>
 </div>
 
-<!-- MENU -->
-<div id="menu">
-  <div class="menu-item" onclick="go('index.html')">🏠 Accueil</div>
-  <div class="menu-item" onclick="go('account.html')">👤 Mon compte</div>
-  <div class="menu-item" onclick="go('login.html')">🔐 Connexion</div>
-  <div class="menu-item" onclick="go('delete-account.html')">❌ Supprimer le compte</div>
-  <div class="menu-item" onclick="logout()">🚪 Déconnexion</div>
-</div>
-
 <!-- CONTENT -->
 <div class="section-title">🌍 CIZA DIASPORA+</div>
-<div class="card service" onclick="go('diaspora.html')">🌍 Services Diaspora</div>
+<div class="card" onclick="go('diaspora.html')">🌍 Services Diaspora</div>
 
 <div class="section-title">🇧🇮 Services Locaux</div>
 <div class="grid">
-  <div class="card service" onclick="go('portail.html')">🚗 CizaRide+</div>
-  <div class="card service" onclick="go('delivery.html')">📦 CizaDelivery</div>
-  <div class="card service" onclick="go('carwash.html')">🧼 CizaCarWash+</div>
-  <div class="card service" onclick="go('assist.html')">🤝 CizaAssist</div>
-  <div class="card service" onclick="go('market.html')">🛒 CizaMarket</div>
-  <div class="card service" onclick="go('cizahome.html')">🏠 CizaHome+</div>
-  <div class="card service" onclick="go('logistics.html')">🚚 CizaLogistics+</div>
-  <div class="card service" onclick="go('jobs.html')">💼 CizaJobs</div>
+  <div class="card" onclick="go('portail.html')">🚗 CizaRide+</div>
+  <div class="card" onclick="go('delivery.html')">📦 CizaDelivery</div>
+  <div class="card" onclick="go('carwash.html')">🧼 CizaCarWash+</div>
+  <div class="card" onclick="go('assist.html')">🤝 CizaAssist</div>
+  <div class="card" onclick="go('market.html')">🛒 CizaMarket</div>
+  <div class="card" onclick="go('cizahome.html')">🏠 CizaHome+</div>
+  <div class="card" onclick="go('logistics.html')">🚚 CizaLogistics+</div>
+  <div class="card" onclick="go('jobs.html')">💼 CizaJobs</div>
 </div>
 
 <div class="section-title">🏢 Solutions Entreprises</div>
-<div class="card service" onclick="go('business.html')">🏢 Business & ONG</div>
+<div class="card" onclick="go('business.html')">🏢 Business & ONG</div>
 
 <!-- FOOTER -->
 <footer class="footer">
@@ -219,46 +210,55 @@ header img{width:44px}
     <div class="footer-name">CIZA GROUP</div>
     <div>Écosystème de services digitaux</div>
   </div>
-
   <div class="footer-links">
     <a href="legal.html">Mentions légales</a>
     <a href="privacy.html">Confidentialité</a>
     <a href="account.html">Mon compte</a>
     <a href="mailto:infos@cizagroup.com">Contact</a>
   </div>
-
-  <div class="footer-copy">
-    © 2026 CIZA GROUP — Tous droits réservés
-  </div>
+  <div class="footer-copy">© 2026 CIZA GROUP — Tous droits réservés</div>
 </footer>
 
+<!-- FLOATING BUTTON -->
+<div id="fab" onclick="openSearch()">🔍</div>
+
 <script>
-function toggleMenu(){
-  document.getElementById("menu").classList.toggle("open");
-}
-function go(url){
-  toggleMenu();
-  location.href=url;
-}
-function logout(){
-  localStorage.removeItem("ciza_user_status");
-  location.href="login.html";
-}
+const items=[
+  ["CizaRide+", "portail.html"],
+  ["Formulaire CizaRide+", "portail.html"],
+  ["CizaDelivery", "delivery.html"],
+  ["Formulaire Livraison", "delivery.html"],
+  ["CizaCarWash+", "carwash.html"],
+  ["Formulaire CarWash", "carwash.html"],
+  ["CizaAssist", "assist.html"],
+  ["Formulaire Assistance", "assist.html"],
+  ["CizaMarket", "market.html"],
+  ["CizaHome+", "cizahome.html"],
+  ["CizaLogistics+", "logistics.html"],
+  ["CizaJobs", "jobs.html"],
+  ["Business & ONG", "business.html"]
+];
+
 function openSearch(){
   document.getElementById("searchOverlay").classList.add("active");
+  document.getElementById("results").innerHTML="";
 }
-function filterServices(q){
-  const res=document.getElementById("results");
-  res.innerHTML="";
-  document.querySelectorAll(".service").forEach(s=>{
-    if(s.innerText.toLowerCase().includes(q.toLowerCase())){
-      res.appendChild(s.cloneNode(true));
+
+function search(q){
+  const r=document.getElementById("results");
+  r.innerHTML="";
+  items.forEach(i=>{
+    if(i[0].toLowerCase().includes(q.toLowerCase())){
+      r.innerHTML+=`<div class="item" onclick="location.href='${i[1]}'">${i[0]}</div>`;
     }
   });
 }
+
 document.getElementById("searchOverlay").onclick=e=>{
   if(e.target.id==="searchOverlay") e.target.classList.remove("active");
 };
+
+function go(url){location.href=url;}
 </script>
 
 </body>
