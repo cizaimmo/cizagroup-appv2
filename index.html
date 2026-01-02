@@ -54,6 +54,39 @@ header{
 header img{width:44px}
 .icon-btn{font-size:22px;color:#F2B840;cursor:pointer}
 
+/* HERO DISTINCT */
+.hero{
+  width:90%;
+  margin:26px auto;
+  padding:28px 22px;
+  border-radius:22px;
+  background:
+    linear-gradient(135deg, rgba(242,184,64,.25), rgba(255,255,255,.05)),
+    rgba(255,255,255,.08);
+  border:2px solid #F2B840;
+  text-align:center;
+  box-shadow:0 10px 30px rgba(0,0,0,.35);
+}
+.hero h2{
+  margin:0;
+  font-size:24px;
+  color:#F2B840;
+}
+.hero p{
+  margin:10px 0 18px;
+  font-size:15px;
+  opacity:.9;
+}
+.hero-btn{
+  display:inline-block;
+  padding:12px 22px;
+  border-radius:30px;
+  background:#F2B840;
+  color:#06142E;
+  font-weight:bold;
+  cursor:pointer;
+}
+
 /* MENU */
 #menuOverlay{
   position:fixed;
@@ -212,6 +245,13 @@ header img{width:44px}
   </div>
 </header>
 
+<!-- HERO -->
+<div class="hero">
+  <h2>CIZA GROUP</h2>
+  <p>Tous les services essentiels réunis dans une seule application.</p>
+  <div class="hero-btn" onclick="openSearch()">🔍 Accès rapide</div>
+</div>
+
 <div id="menuOverlay" onclick="closeMenu()"></div>
 
 <div id="menu">
@@ -283,13 +323,13 @@ const items=[
 ];
 
 function openMenu(){
-  document.getElementById("menu").classList.add("open");
-  document.getElementById("menuOverlay").classList.add("active");
+  menu.classList.add("open");
+  menuOverlay.classList.add("active");
   document.body.classList.add("noscroll");
 }
 function closeMenu(){
-  document.getElementById("menu").classList.remove("open");
-  document.getElementById("menuOverlay").classList.remove("active");
+  menu.classList.remove("open");
+  menuOverlay.classList.remove("active");
   document.body.classList.remove("noscroll");
 }
 function go(url){
@@ -301,20 +341,19 @@ function logout(){
   location.href="login.html";
 }
 function openSearch(){
-  document.getElementById("searchOverlay").classList.add("active");
+  searchOverlay.classList.add("active");
   document.body.classList.add("noscroll");
-  document.getElementById("results").innerHTML="";
+  results.innerHTML="";
 }
 function closeSearch(){
-  document.getElementById("searchOverlay").classList.remove("active");
+  searchOverlay.classList.remove("active");
   document.body.classList.remove("noscroll");
 }
 function search(q){
-  const r=document.getElementById("results");
-  r.innerHTML="";
+  results.innerHTML="";
   items.forEach(i=>{
     if(i[0].toLowerCase().includes(q.toLowerCase())){
-      r.innerHTML+=`<div class="item" onclick="location.href='${i[1]}'">${i[0]}</div>`;
+      results.innerHTML+=`<div class="item" onclick="location.href='${i[1]}'">${i[0]}</div>`;
     }
   });
 }
